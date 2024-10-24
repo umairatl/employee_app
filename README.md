@@ -12,7 +12,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 ## Step 1: Clone project & npm i
 
-## Step 2: Clone project & npm i Start the Metro Server
+## Step 2:  Start the Metro Server
 
 First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
