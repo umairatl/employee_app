@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import * as SecureStore from 'expo-secure-store'; // Import SecureStore for token storage
 import * as Keychain from 'react-native-keychain';
 
 const apiWithInterceptor = axios.create({
@@ -37,8 +36,6 @@ apiWithInterceptor.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // const refreshToken = await SecureStore.getItemAsync('refreshToken');
-        console.log('DOES IT GO HERE?');
         const getStorage = await Keychain.getGenericPassword();
         const parsedPassword = JSON.parse(getStorage.password);
         const refreshToken = parsedPassword.refreshToken;
@@ -61,7 +58,6 @@ apiWithInterceptor.interceptors.response.use(
 
         await Keychain.setGenericPassword('tokens', JSON.stringify(tokens));
         // Update the original request with the new access token and make request again
-        console.log('TOKE EXP - NEWWW ACCESS TOKEN', data.access_token);
         originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
         return axios(originalRequest);
       } catch (err) {

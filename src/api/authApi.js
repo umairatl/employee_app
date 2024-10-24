@@ -31,6 +31,7 @@ export async function loginUser(credential) {
     };
 
     await Keychain.setGenericPassword('tokens', JSON.stringify(tokens));
+    return data;
   } catch (err) {
     throw err;
   }

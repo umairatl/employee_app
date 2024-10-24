@@ -8,6 +8,7 @@ import {SCREEN} from '../constant/navigation';
 import {PAGESIZE_DROPDOWN} from '../constant/table';
 import HomeFlatList from './Flatlist';
 import {HOMEPAGE} from '../constant/main';
+// import {useSelector} from 'react-redux';
 
 const MainPage = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -16,6 +17,7 @@ const MainPage = ({navigation}) => {
   const [totalPages, setTotalPages] = useState(1);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // const token = useSelector(state => state.tokens.accessToken); (eg if wanna use the state from redux)
 
   const getEmployeesData = async () => {
     try {

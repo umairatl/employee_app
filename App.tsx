@@ -9,43 +9,50 @@ import EditEmpDetails from './src/screen/EditDetails';
 import Login from './src/screen/Login';
 import Register from './src/screen/Register';
 import EmployeeDetails from './src/screen/ViewDetails';
+import {Provider} from 'react-redux';
+import {store} from './src/store/store';
 
 const Stack = createStackNavigator();
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={SCREEN.LOGIN}
-        screenOptions={{
-          headerTintColor: 'white',
-          headerStyle: {backgroundColor: '#292989'},
-        }}>
-        <Stack.Screen name={SCREEN.LOGIN} component={Login} />
-        <Stack.Screen
-          name={SCREEN.REGISTRATION}
-          component={Register}
-          options={{
-            headerLeft: () => null,
-            gestureEnabled: false,
-          }}
-        />
-        <Stack.Screen
-          name={SCREEN.MAIN_PAGE}
-          component={MainPage}
-          options={{
-            headerLeft: () => null,
-            gestureEnabled: false,
-            headerRight: () => <LogoutNav />,
-          }}
-        />
-        <Stack.Screen
-          name={SCREEN.EMPLOYEE_DETAILS}
-          component={EmployeeDetails}
-        />
-        <Stack.Screen name={SCREEN.EMPLOYEE_EDIT} component={EditEmpDetails} />
-        <Stack.Screen name={SCREEN.EMPLOYEE_ADD} component={AddEmployee} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName={SCREEN.LOGIN}
+          screenOptions={{
+            headerTintColor: 'white',
+            headerStyle: {backgroundColor: '#292989'},
+          }}>
+          <Stack.Screen name={SCREEN.LOGIN} component={Login} />
+          <Stack.Screen
+            name={SCREEN.REGISTRATION}
+            component={Register}
+            options={{
+              headerLeft: () => null,
+              gestureEnabled: false,
+            }}
+          />
+          <Stack.Screen
+            name={SCREEN.MAIN_PAGE}
+            component={MainPage}
+            options={{
+              headerLeft: () => null,
+              gestureEnabled: false,
+              headerRight: () => <LogoutNav />,
+            }}
+          />
+          <Stack.Screen
+            name={SCREEN.EMPLOYEE_DETAILS}
+            component={EmployeeDetails}
+          />
+          <Stack.Screen
+            name={SCREEN.EMPLOYEE_EDIT}
+            component={EditEmpDetails}
+          />
+          <Stack.Screen name={SCREEN.EMPLOYEE_ADD} component={AddEmployee} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

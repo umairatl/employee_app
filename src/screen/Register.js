@@ -14,6 +14,8 @@ import {emailRegex, passwordRegex} from '../utils/regex';
 import {registerUser} from '../api/authApi';
 import {SCREEN} from '../constant/navigation';
 import {LOGIN_CONSTANT, REGISTER_CONSTANT} from '../constant/main';
+import {useSelector, useDispatch} from 'react-redux';
+import {setTokens} from '../store/store';
 
 const Register = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -24,6 +26,7 @@ const Register = ({navigation}) => {
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [hidePass, setHidePass] = useState(true);
   const [hideRepeatPass, setHideRepeatPass] = useState(true);
+  const dispatch = useDispatch();
 
   const navigateToLogin = () => {
     navigation.navigate(SCREEN.LOGIN);
@@ -94,8 +97,14 @@ const Register = ({navigation}) => {
       };
 
       try {
-        await registerUser(detail);
+        const res = await registerUser(detail);
 
+        dispatch(
+          setTokens({
+            accessToken: res.access_token,
+            refreshToken: res.refresh_token,
+          }),
+        );
         Alert.alert(
           REGISTER_CONSTANT.REGISTERED,
           REGISTER_CONSTANT.REGISTER_SUCCESS_DESC,

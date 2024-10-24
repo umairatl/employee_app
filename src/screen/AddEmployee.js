@@ -42,7 +42,6 @@ const AddEmployee = ({navigation}) => {
         department: department,
         salary: parseFloat(salary),
       };
-      ``;
 
       const res = await addNewEmployee(details);
       if (res.status === 200) {

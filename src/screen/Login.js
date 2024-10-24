@@ -1,17 +1,20 @@
-import {useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text, Alert} from 'react-native';
-import InputBox from '../components/InputBox';
+import {useEffect, useState} from 'react';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import CustomButton from '../components/Button';
+import {useDispatch} from 'react-redux';
 import {loginUser} from '../api/authApi';
+import CustomButton from '../components/Button';
+import InputBox from '../components/InputBox';
 import {LOGIN_CONSTANT} from '../constant/main';
 import {SCREEN} from '../constant/navigation';
+import {setTokens} from '../store/store';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [hidePass, setHidePass] = useState(true);
+  const dispatch = useDispatch();
 
   const navigateToRegister = async () => {
     navigation.navigate(SCREEN.REGISTRATION);
@@ -27,14 +30,18 @@ const Login = ({navigation}) => {
 
   const onClickLogin = async () => {
     const credential = {
-      email: 'ahmed1@example.com',
-      password: 'yourSecurePassword1',
-      // email: email,
-      // password: password,
+      email: email,
+      password: password,
     };
 
     try {
-      await loginUser(credential);
+      const res = await loginUser(credential);
+      dispatch(
+        setTokens({
+          accessToken: res.access_token,
+          refreshToken: res.refresh_token,
+        }),
+      );
       navigation.navigate(SCREEN.MAIN_PAGE);
     } catch (err) {
       Alert.alert('Error', `${err.response.data.message}`, [{text: 'Ok'}]);
