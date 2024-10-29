@@ -1,10 +1,20 @@
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SCREEN} from '../constant/navigation';
+import {useDispatch} from 'react-redux';
+import {setEmployeeId} from '../store/employeeSlice';
 
 export default function HomeFlatList({data, navigation}) {
+  const dispatch = useDispatch();
+
   const onClickViewDetail = id => {
-    navigation.navigate(SCREEN.EMPLOYEE_DETAILS, {id});
+    dispatch(
+      setEmployeeId({
+        employeeId: id,
+      }),
+    );
+
+    navigation.navigate(SCREEN.EMPLOYEE_DETAILS);
   };
 
   return (
@@ -12,7 +22,7 @@ export default function HomeFlatList({data, navigation}) {
       data={data}
       keyExtractor={item => item.id}
       scrollEnabled={true}
-      style={{height: 555}}
+      style={{height: 500}}
       renderItem={({item, index}) => (
         <View style={styles.item}>
           <TouchableOpacity
@@ -20,22 +30,33 @@ export default function HomeFlatList({data, navigation}) {
             onPress={() => {
               onClickViewDetail(item.id);
             }}>
-            <View>
-              <View style={styles.wrapFlatList}>
-                <View
-                  style={{
-                    width: 10,
-                    height: 10,
-                    backgroundColor: '#292989',
-                    borderRadius: 50,
-                  }}></View>
-                <Text>{item.department}</Text>
+            <View style={styles.layout}>
+              <Image
+                source={require('../../assets/images/profile.png')}
+                style={{
+                  width: 70,
+                  height: 70,
+                }}
+              />
+
+              <View style={styles.detailsLayout}>
+                <View style={styles.wrapFlatList}>
+                  <View
+                    style={{
+                      width: 10,
+                      height: 10,
+                      backgroundColor: '#292989',
+                      borderRadius: 50,
+                    }}></View>
+                  <Text>{item.department}</Text>
+                </View>
+
+                <Text
+                  style={
+                    styles.taskText
+                  }>{`${item.firstName} ${item.lastName}`}</Text>
+                <Text style={styles.taskText}>{item.email}</Text>
               </View>
-              <Text
-                style={
-                  styles.taskText
-                }>{`${item.firstName} ${item.lastName}`}</Text>
-              <Text style={styles.taskText}>{item.email}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -46,24 +67,33 @@ export default function HomeFlatList({data, navigation}) {
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#d6d6f2',
-    padding: 16,
+    backgroundColor: 'white',
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 8,
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.15,
+    shadowRadius: 1.84,
     elevation: 5,
+    borderLeftColor: '#4c669f',
+    borderLeftWidth: 5,
+  },
+  layout: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  detailsLayout: {
+    flexDirection: 'column',
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   wrapFlatList: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'start',
     alignItems: 'center',
     gap: 10,
   },
   taskText: {
     fontSize: 16,
+    color: 'black',
     fontWeight: 'bold',
   },
 });

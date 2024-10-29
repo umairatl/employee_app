@@ -36,7 +36,7 @@ export const ADD_CONSTANT = {
   SEE_NEW_LIST: 'See new list',
   DEPARTMENT_NAME: 'Department Name',
   DEPARTMENT: 'Department',
-  SALARY: 'Salary',
+  SALARY: 'Salary Amount',
   SAVE: 'Save',
 };
 

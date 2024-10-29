@@ -1,4 +1,5 @@
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -12,34 +13,33 @@ const InputBox = props => {
     secureTextEntry = false,
     keyboardType = 'default',
     passwordVisibleIcon = false,
+    placeholder = '',
     onClickVisibleIcon,
+    customStyle = {},
   } = props || {};
 
   return (
     <View>
       {isTitle && <Text style={styles.title}>{boxTitle}</Text>}
-      <View style={styles.wrapInput}>
-        <TextInput
-          secureTextEntry={secureTextEntry}
-          keyboardType={keyboardType}
-          style={styles.detailInput}
-          placeholder={title}
-          onChangeText={val => {
-            setInputVal(val);
-          }}
-          value={inputVal}
-        />
-        {passwordVisibleIcon && (
-          <TouchableOpacity
-            onPress={onClickVisibleIcon}
-            style={{marginLeft: 10}}>
-            <Icon
-              name={secureTextEntry ? 'visibility-off' : 'visibility'}
-              size={25}
+      <TextInput
+        label={placeholder}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        style={[styles.detailInput, customStyle]}
+        placeholder={title}
+        onChangeText={val => {
+          setInputVal(val);
+        }}
+        value={inputVal}
+        right={
+          passwordVisibleIcon && (
+            <TextInput.Icon
+              icon={secureTextEntry ? 'eye-off' : 'eye'}
+              onPress={onClickVisibleIcon}
             />
-          </TouchableOpacity>
-        )}
-      </View>
+          )
+        }
+      />
     </View>
   );
 };
@@ -50,20 +50,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'left',
   },
-
-  wrapInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   detailInput: {
     marginTop: 10,
     marginBottom: 10,
     fontSize: 15,
+    borderColor: '#292989',
+    borderWidth: 0.8,
     backgroundColor: '#fff',
-    padding: 18,
     borderRadius: 8,
     shadowColor: '#000',
-    flex: 1,
   },
 });
 

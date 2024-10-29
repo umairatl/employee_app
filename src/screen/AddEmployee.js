@@ -60,47 +60,49 @@ const AddEmployee = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <InputBox
-          title={REGISTER_CONSTANT.FIRST_NAME}
-          inputVal={firstName}
-          isTitle={true}
-          setInputVal={setFirstName}
-          boxTitle={`${REGISTER_CONSTANT.FIRST_NAME} :`}
-        />
-        <InputBox
-          title={REGISTER_CONSTANT.LAST_NAME}
-          inputVal={lastName}
-          isTitle={true}
-          setInputVal={setLastName}
-          boxTitle={`${REGISTER_CONSTANT.LAST_NAME}`}
-        />
-        <InputBox
-          title={LOGIN_CONSTANT.EMAIL}
-          inputVal={email}
-          isTitle={true}
-          setInputVal={setEmail}
-          boxTitle={`${LOGIN_CONSTANT.EMAIL}`}
-        />
-        <InputBox
-          title={ADD_CONSTANT.DEPARTMENT_NAME}
-          inputVal={department}
-          isTitle={true}
-          setInputVal={setDepartment}
-          boxTitle={`${ADD_CONSTANT.DEPARTMENT}`}
-        />
-        <InputBox
-          title={ADD_CONSTANT.SALARY}
-          inputVal={salary}
-          isTitle={true}
-          setInputVal={setSalary}
-          keyboardType="numeric"
-          boxTitle={`${ADD_CONSTANT.SALARY}`}
-        />
-        <CustomButton
-          title={ADD_CONSTANT.SAVE}
-          isBtnDisabled={isBtnDisabled}
-          btnFunction={onClickAdd}
-        />
+        <View style={styles.wrapForm}>
+          <InputBox
+            title={REGISTER_CONSTANT.FIRST_NAME}
+            inputVal={firstName}
+            isTitle={true}
+            setInputVal={setFirstName}
+            boxTitle={`${REGISTER_CONSTANT.FIRST_NAME} :`}
+          />
+          <InputBox
+            title={REGISTER_CONSTANT.LAST_NAME}
+            inputVal={lastName}
+            isTitle={true}
+            setInputVal={setLastName}
+            boxTitle={`${REGISTER_CONSTANT.LAST_NAME}`}
+          />
+          <InputBox
+            title={LOGIN_CONSTANT.EMAIL}
+            inputVal={email}
+            isTitle={true}
+            setInputVal={setEmail}
+            boxTitle={`${LOGIN_CONSTANT.EMAIL}`}
+          />
+          <InputBox
+            title={ADD_CONSTANT.DEPARTMENT_NAME}
+            inputVal={department}
+            isTitle={true}
+            setInputVal={setDepartment}
+            boxTitle={`${ADD_CONSTANT.DEPARTMENT}`}
+          />
+          <InputBox
+            title={ADD_CONSTANT.SALARY}
+            inputVal={salary}
+            isTitle={true}
+            setInputVal={setSalary}
+            keyboardType="numeric"
+            boxTitle={`${ADD_CONSTANT.SALARY}`}
+          />
+          <CustomButton
+            title={ADD_CONSTANT.SAVE}
+            isBtnDisabled={isBtnDisabled}
+            btnFunction={onClickAdd}
+          />
+        </View>
       </ScrollView>
     </View>
   );
@@ -111,7 +113,13 @@ export default AddEmployee;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'start',
-    margin: 20,
     flex: 1,
+  },
+  wrapForm: {
+    backgroundColor: 'white',
+    padding: 45,
+    height: '100%',
+    marginTop: 25,
+    borderTopStartRadius: 100,
   },
 });

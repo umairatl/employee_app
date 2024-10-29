@@ -1,5 +1,12 @@
 import {useEffect, useState} from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../api/authApi';
@@ -7,7 +14,7 @@ import CustomButton from '../components/Button';
 import InputBox from '../components/InputBox';
 import {LOGIN_CONSTANT} from '../constant/main';
 import {SCREEN} from '../constant/navigation';
-import {setTokens} from '../store/store';
+import {setTokens} from '../store/authSlice';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -30,8 +37,10 @@ const Login = ({navigation}) => {
 
   const onClickLogin = async () => {
     const credential = {
-      email: email,
-      password: password,
+      email: 'ahmed1@example.com',
+      password: 'yourSecurePassword1',
+      // email: email,
+      // password: password,
     };
 
     try {
@@ -51,35 +60,52 @@ const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback>
-        <InputBox
-          title={LOGIN_CONSTANT.EMAIL}
-          inputVal={email}
-          setInputVal={setEmail}
-        />
+        <View style={styles.wrapImg}>
+          <Image
+            source={require('../../assets/images/login.png')}
+            style={{width: 300, height: 250}}
+          />
+        </View>
 
-        <InputBox
-          title={LOGIN_CONSTANT.PASSWORD}
-          inputVal={password}
-          setInputVal={setPassword}
-          secureTextEntry={hidePass}
-          passwordVisibleIcon={true}
-          onClickVisibleIcon={() => {
-            setHidePass(!hidePass);
-          }}
-        />
+        <Text style={styles.label}>Hey, welcome back !</Text>
 
-        <TouchableOpacity onPress={navigateToRegister}>
-          <View>
-            <Text style={{marginTop: 10}}>{LOGIN_CONSTANT.NO_ACCOUNT}</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.wrapLoginBottom}>
+          <InputBox
+            placeholder={LOGIN_CONSTANT.EMAIL}
+            inputVal={email}
+            setInputVal={setEmail}
+          />
+
+          <InputBox
+            placeholder={LOGIN_CONSTANT.PASSWORD}
+            inputVal={password}
+            setInputVal={setPassword}
+            secureTextEntry={hidePass}
+            passwordVisibleIcon={true}
+            onClickVisibleIcon={() => {
+              setHidePass(!hidePass);
+            }}
+          />
+
+          <TouchableOpacity onPress={navigateToRegister}>
+            <View>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontWeight: 'bold',
+                }}>
+                {LOGIN_CONSTANT.NO_ACCOUNT}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <CustomButton
+            title={LOGIN_CONSTANT.SUBMIT}
+            btnFunction={onClickLogin}
+            isBtnDisabled={isBtnDisabled}
+          />
+        </View>
       </TouchableWithoutFeedback>
-
-      <CustomButton
-        title={LOGIN_CONSTANT.SUBMIT}
-        btnFunction={onClickLogin}
-        isBtnDisabled={isBtnDisabled}
-      />
     </View>
   );
 };
@@ -87,31 +113,27 @@ const Login = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'start',
-    margin: 20,
+    backgroundColor: '#292989',
   },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    textAlign: 'left',
-    marginTop: 25,
-    marginBottom: 10,
+  wrapLoginBottom: {
+    backgroundColor: 'white',
+    height: '100%',
+    paddingTop: 55,
+    paddingRight: 25,
+    paddingLeft: 25,
+    borderTopLeftRadius: 70,
   },
-  detailInput: {
-    fontSize: 15,
-    backgroundColor: '#fff',
-    padding: 13,
-    borderRadius: 8,
-    shadowColor: '#000',
+  wrapImg: {
+    alignItems: 'center',
+    marginTop: 50,
   },
-  wrapBtn: {
-    marginTop: 35,
-    borderRadius: 8,
-  },
-  btnText: {
-    padding: 14,
+  label: {
+    fontSize: 20,
     textAlign: 'center',
+    // marginRight: 15,
+    marginTop: 20,
+    marginBottom: 15,
     color: 'white',
-    fontSize: 17,
   },
 });
 

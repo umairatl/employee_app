@@ -4,14 +4,18 @@ import {updateEmployeeDetails} from '../api/employee';
 import CustomButton from '../components/Button';
 import InputBox from '../components/InputBox';
 import {SCREEN} from '../constant/navigation';
+import {useSelector} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
 
-const EditEmpDetails = ({route, navigation}) => {
-  const {item, id} = route.params || {};
-  const [firstName, setFirstName] = useState(item?.firstName);
-  const [lastName, setLastName] = useState(item?.lastName);
-  const [email, setEmail] = useState(item?.email);
-  const [department, setDepartment] = useState(item?.department);
-  const [salary, setSalary] = useState(item?.salary.toString());
+const EditEmpDetails = ({navigation}) => {
+  const id = useSelector(state => state.employee.employeeId);
+  const employeeItem = useSelector(state => state.employee.employeeItem);
+
+  const [firstName, setFirstName] = useState(employeeItem.firstName || '');
+  const [lastName, setLastName] = useState(employeeItem.lastName || '');
+  const [email, setEmail] = useState(employeeItem.email || '');
+  const [department, setDepartment] = useState(employeeItem.department || '');
+  const [salary, setSalary] = useState(employeeItem.salary.toString() || '');
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
 
   useEffect(() => {
@@ -43,7 +47,7 @@ const EditEmpDetails = ({route, navigation}) => {
         Alert.alert('Updated', 'Your details are updated', [
           {
             text: 'See details',
-            onPress: () => navigation.navigate(SCREEN.EMPLOYEE_DETAILS),
+            onPress: () => navigation.navigate(SCREEN.EMPLOYEE_DETAILS, {id}),
           },
         ]);
       }
@@ -54,47 +58,51 @@ const EditEmpDetails = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <InputBox
-        title="First Name"
-        inputVal={firstName}
-        isTitle={true}
-        setInputVal={setFirstName}
-        boxTitle="First Name :"
-      />
-      <InputBox
-        title="Last Name"
-        inputVal={lastName}
-        isTitle={true}
-        setInputVal={setLastName}
-        boxTitle="Last Name :"
-      />
-      <InputBox
-        title=" Email"
-        inputVal={email}
-        isTitle={true}
-        setInputVal={setEmail}
-        boxTitle="Email :"
-      />
-      <InputBox
-        title="Department Name"
-        inputVal={department}
-        isTitle={true}
-        setInputVal={setDepartment}
-        boxTitle="Department :"
-      />
-      <InputBox
-        title="Salary"
-        inputVal={salary}
-        isTitle={true}
-        setInputVal={setSalary}
-        keyboardType="numeric"
-        boxTitle="Salary :"
-      />
-      <CustomButton
-        title="Save"
-        isBtnDisabled={isBtnDisabled}
-        btnFunction={onClickUpdateDetail}
-      />
+      <ScrollView>
+        <View style={styles.wrapForm}>
+          <InputBox
+            title="First Name"
+            inputVal={firstName}
+            isTitle={true}
+            setInputVal={setFirstName}
+            boxTitle="First Name :"
+          />
+          <InputBox
+            title="Last Name"
+            inputVal={lastName}
+            isTitle={true}
+            setInputVal={setLastName}
+            boxTitle="Last Name :"
+          />
+          <InputBox
+            title=" Email"
+            inputVal={email}
+            isTitle={true}
+            setInputVal={setEmail}
+            boxTitle="Email :"
+          />
+          <InputBox
+            title="Department Name"
+            inputVal={department}
+            isTitle={true}
+            setInputVal={setDepartment}
+            boxTitle="Department :"
+          />
+          <InputBox
+            title="Salary"
+            inputVal={salary}
+            isTitle={true}
+            setInputVal={setSalary}
+            keyboardType="numeric"
+            boxTitle="Salary Amount ($):"
+          />
+          <CustomButton
+            title="Save"
+            isBtnDisabled={isBtnDisabled}
+            btnFunction={onClickUpdateDetail}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -104,6 +112,13 @@ export default EditEmpDetails;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'start',
-    margin: 20,
+    flex: 1,
+  },
+  wrapForm: {
+    backgroundColor: 'white',
+    padding: 45,
+    height: '100%',
+    marginTop: 25,
+    borderTopStartRadius: 100,
   },
 });

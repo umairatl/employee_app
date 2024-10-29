@@ -1,23 +1,35 @@
 import {useFocusEffect} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  MD2Colors,
+  Modal,
+  Portal,
+  RadioButton,
+} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Entypo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch} from 'react-redux';
 import {getEmployeesByPagination} from '../api/employee';
-import {SCREEN} from '../constant/navigation';
-import {PAGESIZE_DROPDOWN} from '../constant/table';
-import HomeFlatList from './Flatlist';
 import {HOMEPAGE} from '../constant/main';
-// import {useSelector} from 'react-redux';
+import HomeFlatList from './Flatlist';
+import {setEmployeeDataCounts} from '../store/employeeSlice';
 
 const MainPage = ({navigation}) => {
   const [data, setData] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
-  const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  // const token = useSelector(state => state.tokens.accessToken); (eg if wanna use the state from redux)
+  const dispatch = useDispatch();
+
+  // modal section
+  const [value, setValue] = useState('10');
+  const [visible, setVisible] = useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = {backgroundColor: 'white', padding: 50, margin: 40};
 
   const getEmployeesData = async () => {
     try {
@@ -26,6 +38,14 @@ const MainPage = ({navigation}) => {
       if (dataList) {
         setData(dataList.content);
         setTotalPages(dataList.totalPages);
+
+        dispatch(
+          setEmployeeDataCounts({
+            countTotalEmployee: dataList.totalElements,
+            countTotalPage: dataList.totalPages,
+            countItemInList: dataList.content.length,
+          }),
+        );
       }
     } catch (err) {
       console.log('Error getEmployeesData', err);
@@ -55,95 +75,81 @@ const MainPage = ({navigation}) => {
     setPageNo(prev => prev + 1);
   };
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
-
-  const selectPageSize = size => {
-    setPageNo(0);
-    setPageSize(size);
-    setShowDropdown(false);
-  };
-
-  const onClickAddEmployee = () => {
-    navigation.navigate(SCREEN.EMPLOYEE_ADD);
-  };
-
   return (
     <View style={styles.container}>
-      <View style={{position: 'absolute', zIndex: 999}}>
-        <TouchableOpacity style={styles.dropdown} onPress={toggleDropdown}>
-          <Text>Page Size: {pageSize}</Text>
+      <View style={styles.wrapPagination}>
+        <TouchableOpacity onPress={showModal}>
+          <View style={{marginLeft: 10}}>
+            <MaterialIcons name="sort" size={30} />
+          </View>
         </TouchableOpacity>
-        {showDropdown && (
-          <FlatList
-            style={{height: 70}}
-            data={PAGESIZE_DROPDOWN}
-            scrollEnabled={true}
-            keyExtractor={item => item.toString()}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={styles.dropdownItem}
-                onPress={() => selectPageSize(item)}>
-                <Text>{item} </Text>
-              </TouchableOpacity>
-            )}
-          />
-        )}
+
+        <View>
+          <Text>{`${HOMEPAGE.PAGE} ${pageNo + 1}/ ${totalPages}`}</Text>
+        </View>
+
+        <View flexDirection="row">
+          <TouchableOpacity onPress={onClickPrev} disabled={pageNo === 0}>
+            <View
+              style={{
+                backgroundColor: pageNo === 0 ? '#D3D3D3' : '#292989',
+                width: 40,
+                height: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: 10,
+              }}>
+              <Icon name="chevron-left" size={30} color="white" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onClickNext}
+            disabled={pageNo === totalPages - 1}>
+            <View
+              style={{
+                backgroundColor:
+                  pageNo === totalPages - 1 ? '#D3D3D3' : '#292989',
+                width: 40,
+                height: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Icon name="chevron-right" size={30} color="white" />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View style={{marginTop: 70}}>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          contentContainerStyle={containerStyle}>
+          <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 15}}>
+            Sort by page size:
+          </Text>
+          <RadioButton.Group
+            onValueChange={value => {
+              setValue(value);
+              setPageNo(0);
+              setPageSize(value);
+              setVisible(false);
+            }}
+            value={value}>
+            <RadioButton.Item label="5 per page" value="5" />
+            <RadioButton.Item label="10 per page" value="10" />
+            <RadioButton.Item label="50 per page" value="50" />
+            <RadioButton.Item label="100 per page" value="100" />
+          </RadioButton.Group>
+        </Modal>
+      </Portal>
+
+      <View style={{marginTop: 10}}>
         {isLoading ? (
           <ActivityIndicator animating={true} color={MD2Colors.blueGrey400} />
         ) : (
           <HomeFlatList data={data} navigation={navigation} />
         )}
-        <View style={styles.wrapPagination}>
-          <TouchableOpacity onPress={onClickAddEmployee}>
-            <View style={styles.btnEmployee}>
-              <Text style={{color: 'white'}}>{HOMEPAGE.ADD_EMPLOYEE}</Text>
-            </View>
-          </TouchableOpacity>
-
-          <View>
-            <Text>{`${HOMEPAGE.PAGE} ${pageNo + 1}/ ${totalPages}`}</Text>
-          </View>
-
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-            }}>
-            <TouchableOpacity onPress={onClickPrev} disabled={pageNo === 0}>
-              <View
-                style={{
-                  backgroundColor: pageNo === 0 ? '#D3D3D3' : '#292989',
-                  width: 40,
-                  height: 40,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginRight: 10,
-                }}>
-                <Icon name="chevron-left" size={30} color="white" />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={onClickNext}
-              disabled={pageNo === totalPages - 1}>
-              <View
-                style={{
-                  backgroundColor:
-                    pageNo === totalPages - 1 ? '#D3D3D3' : '#292989',
-                  width: 40,
-                  height: 40,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Icon name="chevron-right" size={30} color="white" />
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
     </View>
   );
@@ -154,13 +160,15 @@ export default MainPage;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'start',
+    marginTop: 20,
   },
   wrapPagination: {
-    display: 'flex',
     alignItems: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
+    justifyContent: 'space-between',
+    marginTop: 50,
   },
 
   dropdown: {
@@ -170,8 +178,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: 'center',
     width: 110,
-    marginLeft: 260,
-    marginTop: 20,
   },
   dropdownItem: {
     padding: 10,

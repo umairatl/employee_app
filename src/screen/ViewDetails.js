@@ -2,21 +2,26 @@ import {useFocusEffect} from '@react-navigation/native';
 import {useCallback, useState} from 'react';
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {deleteEmployeeById, employeeDetails} from '../api/employee';
-import {SCREEN} from '../constant/navigation';
 import {
   ADD_CONSTANT,
   LOGIN_CONSTANT,
   REGISTER_CONSTANT,
   VIEW_EMPLOYEE_CONSTANT,
 } from '../constant/main';
+import {SCREEN} from '../constant/navigation';
+import {useDispatch, useSelector} from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {setEmployeeItem} from '../store/employeeSlice';
 
-export default function EmployeeDetails({route, navigation}) {
-  const {id} = route.params || {};
+export default function EmployeeDetails({navigation}) {
   const [item, setItem] = useState({});
+  const id = useSelector(state => state.employee.employeeId);
+  const dispatch = useDispatch();
 
   const getEmployeeDetails = async () => {
     try {
       const data = await employeeDetails(id);
+      dispatch(setEmployeeItem({employeeItem: data}));
       setItem(data);
     } catch (err) {
       console.log('Error getEmployeeDetails', err);
@@ -66,38 +71,43 @@ export default function EmployeeDetails({route, navigation}) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{`${REGISTER_CONSTANT.FIRST_NAME} :`}</Text>
-      <Text style={styles.desc}> {item.firstName}</Text>
+    <View style={styles.background}>
+      <View style={styles.container}>
+        <View flexDirection="row" style={styles.wrapContent}>
+          <Text
+            style={styles.title}>{`${REGISTER_CONSTANT.FIRST_NAME} :`}</Text>
+          <Text style={styles.desc}> {item.firstName}</Text>
+        </View>
 
-      <Text style={styles.title}>{`${REGISTER_CONSTANT.LAST_NAME} :`}</Text>
-      <Text style={styles.desc}> {item.lastName}</Text>
+        <View flexDirection="row" style={styles.wrapContent}>
+          <Text style={styles.title}>{`${REGISTER_CONSTANT.LAST_NAME} :`}</Text>
+          <Text style={styles.desc}> {item.lastName}</Text>
+        </View>
 
-      <Text style={styles.title}>{`${LOGIN_CONSTANT.EMAIL} :`}</Text>
-      <Text style={styles.desc}> {item.email}</Text>
+        <View flexDirection="row" style={styles.wrapContent}>
+          <Text style={styles.title}>{`${LOGIN_CONSTANT.EMAIL} :`}</Text>
+          <Text style={styles.desc}> {item.email}</Text>
+        </View>
 
-      <Text style={styles.title}>{`${ADD_CONSTANT.DEPARTMENT} :`}</Text>
-      <Text style={styles.desc}> {item.department}</Text>
+        <View flexDirection="row" style={styles.wrapContent}>
+          <Text style={styles.title}>{`${ADD_CONSTANT.DEPARTMENT} :`}</Text>
+          <Text style={styles.desc}> {item.department}</Text>
+        </View>
 
-      <Text style={styles.title}>{`${ADD_CONSTANT.SALARY} :`}</Text>
-      <Text style={styles.desc}> {item.salary}</Text>
+        <View flexDirection="row" style={styles.wrapContent}>
+          <Text style={styles.title}>{`${ADD_CONSTANT.SALARY} :`}</Text>
+          <Text style={styles.desc}>$ {item.salary}</Text>
+        </View>
+      </View>
 
-      <View style={styles.wrapBtns}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate(SCREEN.EMPLOYEE_EDIT, {id, item});
-          }}>
-          <View style={styles.wrapBtn}>
-            <Text style={styles.btnText}>
-              {VIEW_EMPLOYEE_CONSTANT.EDIT_DETAILS}
-            </Text>
-          </View>
-        </TouchableOpacity>
+      <View style={styles.wrapBtn}>
         <TouchableOpacity onPress={onDeleteConfirmation}>
-          <View style={styles.deleteBtn}>
-            <Text style={styles.btnText}>
-              {VIEW_EMPLOYEE_CONSTANT.DELETE_EMPLOYEE}
-            </Text>
+          <View
+            flexDirection="row"
+            alignItems="center"
+            style={styles.deleteBtn}>
+            <Icon name="delete" size={40} color="white" />
+            <Text style={{color: 'white', fontSize: 16}}>Delete user</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -107,41 +117,43 @@ export default function EmployeeDetails({route, navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'start',
-    margin: 20,
+    backgroundColor: 'white',
+    marginTop: 110,
+    marginRight: 15,
+    marginLeft: 15,
+    padding: 15,
+    borderRadius: 30,
   },
   title: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    textAlign: 'left',
-    marginTop: 25,
-    marginBottom: 10,
+    fontSize: 16,
+    color: 'black',
   },
   desc: {
-    fontSize: 20,
-    marginBottom: 20,
+    fontSize: 14,
+    color: '#4A4A4A',
   },
   wrapBtn: {
     marginTop: 35,
-    backgroundColor: '#292989',
-    borderRadius: 10,
-    width: 160,
-  },
-  btnText: {
-    padding: 14,
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 17,
-  },
-  wrapBtns: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginLeft: 20,
   },
   deleteBtn: {
-    marginTop: 35,
     backgroundColor: '#8B0000',
-    borderRadius: 14,
-    width: 160,
+    width: 150,
+    padding: 10,
+    borderRadius: 30,
+    // width: 50,
+    // height: 50,
+  },
+  background: {
+    // backgroundColor: '#292989',
+    height: '100%',
+  },
+  wrapContent: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 30,
+    paddingBottom: 30,
+    borderBottomWidth: 0.3,
+    borderBottomColor: 'grey',
   },
 });

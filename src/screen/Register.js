@@ -1,21 +1,25 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Keyboard,
   Alert,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
 } from 'react-native';
-import InputBox from '../components/InputBox';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import CustomButton from '../components/Button';
-import {emailRegex, passwordRegex} from '../utils/regex';
+import {
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
+import {useDispatch} from 'react-redux';
 import {registerUser} from '../api/authApi';
-import {SCREEN} from '../constant/navigation';
+import CustomButton from '../components/Button';
+import InputBox from '../components/InputBox';
 import {LOGIN_CONSTANT, REGISTER_CONSTANT} from '../constant/main';
-import {useSelector, useDispatch} from 'react-redux';
+import {SCREEN} from '../constant/navigation';
 import {setTokens} from '../store/store';
+import {emailRegex, passwordRegex} from '../utils/regex';
 
 const Register = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -123,60 +127,84 @@ const Register = ({navigation}) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <InputBox
-          title={REGISTER_CONSTANT.FIRST_NAME}
-          inputVal={firstName}
-          setInputVal={setFirstName}
-        />
-
-        <InputBox
-          title={REGISTER_CONSTANT.LAST_NAME}
-          inputVal={lastName}
-          setInputVal={setLastName}
-        />
-
-        <InputBox
-          title={LOGIN_CONSTANT.EMAIL}
-          inputVal={email}
-          setInputVal={setEmail}
-        />
-
-        <InputBox
-          title={LOGIN_CONSTANT.PASSWORD}
-          inputVal={password}
-          setInputVal={setPassword}
-          secureTextEntry={hidePass}
-          passwordVisibleIcon={true}
-          onClickVisibleIcon={() => {
-            setHidePass(!hidePass);
-          }}
-        />
-
-        <InputBox
-          title={REGISTER_CONSTANT.CONFIRM_PASSWORD}
-          inputVal={repeatPass}
-          setInputVal={setRepeatPass}
-          secureTextEntry={hideRepeatPass}
-          passwordVisibleIcon={true}
-          onClickVisibleIcon={() => {
-            setHideRepeatPass(!hideRepeatPass);
-          }}
-        />
-
-        <TouchableOpacity onPress={navigateToLogin}>
-          <View>
-            <Text style={{textDecorationLine: 'underline', marginTop: 10}}>
-              {REGISTER_CONSTANT.ALREADY_HAVE_ACC}
-            </Text>
+      <View style={{backgroundColor: '#292989'}}>
+        <View style={styles.container}>
+          <View style={styles.wrapImg}>
+            <Image
+              source={require('../../assets/images/register.png')}
+              style={{width: '70%', height: 200}}
+            />
           </View>
-        </TouchableOpacity>
 
-        <CustomButton
-          title={REGISTER_CONSTANT.REGISTER}
-          isBtnDisabled={isBtnDisabled}
-          btnFunction={onClickRegister}
-        />
+          <Text style={{fontSize: 20, color: 'black', textAlign: 'center'}}>
+            Register for user
+          </Text>
+
+          <ScrollView>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-between',
+              }}>
+              <InputBox
+                placeholder={REGISTER_CONSTANT.FIRST_NAME}
+                inputVal={firstName}
+                setInputVal={setFirstName}
+                customStyle={{width: 165}}
+              />
+
+              <InputBox
+                placeholder={REGISTER_CONSTANT.LAST_NAME}
+                inputVal={lastName}
+                setInputVal={setLastName}
+                customStyle={{width: 165}}
+              />
+            </View>
+
+            <InputBox
+              placeholder={LOGIN_CONSTANT.EMAIL}
+              inputVal={email}
+              setInputVal={setEmail}
+            />
+
+            <InputBox
+              placeholder={LOGIN_CONSTANT.PASSWORD}
+              inputVal={password}
+              setInputVal={setPassword}
+              secureTextEntry={hidePass}
+              passwordVisibleIcon={true}
+              onClickVisibleIcon={() => {
+                setHidePass(!hidePass);
+              }}
+            />
+
+            <InputBox
+              placeholder={REGISTER_CONSTANT.CONFIRM_PASSWORD}
+              inputVal={repeatPass}
+              setInputVal={setRepeatPass}
+              secureTextEntry={hideRepeatPass}
+              passwordVisibleIcon={true}
+              onClickVisibleIcon={() => {
+                setHideRepeatPass(!hideRepeatPass);
+              }}
+            />
+
+            <TouchableOpacity onPress={navigateToLogin}>
+              <View>
+                <Text style={{textDecorationLine: 'underline', marginTop: 10}}>
+                  {REGISTER_CONSTANT.ALREADY_HAVE_ACC}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <CustomButton
+              title={REGISTER_CONSTANT.REGISTER}
+              isBtnDisabled={isBtnDisabled}
+              btnFunction={onClickRegister}
+            />
+          </ScrollView>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -184,11 +212,20 @@ const Register = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'white',
     alignItems: 'start',
-    marginRight: 20,
-    marginLeft: 20,
-    marginTop: 10,
-    marginBottom: 10,
+    justifyContent: 'start',
+    marginTop: 40,
+    paddingRight: 20,
+    paddingLeft: 20,
+    paddingBottom: 10,
+    height: '100%',
+    borderTopLeftRadius: 70,
+  },
+  wrapImg: {
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
 });
 

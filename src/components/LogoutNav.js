@@ -1,18 +1,21 @@
-import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as Keychain from 'react-native-keychain';
-import {SCREEN} from '../constant/navigation';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch} from 'react-redux';
+import {setTokens} from '../store/authSlice';
 
 const LogoutNav = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const onClickLogout = async () => {
-    const clearKeychain = await Keychain.resetGenericPassword();
+    await Keychain.resetGenericPassword();
 
-    if (clearKeychain) {
-      navigation.navigate(SCREEN.LOGIN);
-    }
+    dispatch(
+      setTokens({
+        accessToken: null,
+        refreshToken: null,
+      }),
+    );
   };
 
   return (
@@ -21,7 +24,7 @@ const LogoutNav = () => {
         onPress={() => {
           onClickLogout();
         }}>
-        <View style={{marginRight: 20}}>
+        <View style={{marginRight: 10}}>
           <Icon name="logout" size={30} color="white" />
         </View>
       </TouchableOpacity>
