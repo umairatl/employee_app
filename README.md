@@ -10,7 +10,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting Started
 
-## Step 1: Clone project & npm i
+## Step 1: Clone project & npm i & pod install
 
 ## Step 2:  Start the Metro Server
 
@@ -25,6 +25,16 @@ npm start
 ## Step 2: Start your Application
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+
+### For iOS
+
+```bash
+# using npm
+npm run ios
+
+# OR using Yarn
+yarn ios
+````
 
 ### For Android
 
