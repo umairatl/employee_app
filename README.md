@@ -54,5 +54,11 @@ This is one way to run your app — you can also run it directly from within And
 Screens:
 <img width="351" alt="image" src="https://github.com/user-attachments/assets/1a43393f-fb56-421b-a6f5-fc50d50577ea">
 <img width="351" alt="image" src="https://github.com/user-attachments/assets/dcbf5026-ada0-4fca-8018-fee973f961ab">
+<img width="345" alt="image" src="https://github.com/user-attachments/assets/31caafea-ca4f-4fb3-a82f-2e62337811c1">
+<img width="345" alt="image" src="https://github.com/user-attachments/assets/49a64a01-078f-4311-a195-f33363067277">
+<img width="346" alt="image" src="https://github.com/user-attachments/assets/4725c461-a23c-4c18-ab42-fdab6f95fdbb">
+<img width="344" alt="image" src="https://github.com/user-attachments/assets/f8789e0d-740c-4f82-b1e6-e0923fccf32e">
+<img width="341" alt="image" src="https://github.com/user-attachments/assets/fe3dc1fd-9f75-4dbf-a49a-bb8b5c134a17">
+
 
 
