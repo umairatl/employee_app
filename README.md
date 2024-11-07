@@ -50,3 +50,9 @@ yarn android
 If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ shortly provided you have set up your emulator/simulator correctly.
 
 This is one way to run your app — you can also run it directly from within Android Studio respectively.
+
+Screens:
+<img width="351" alt="image" src="https://github.com/user-attachments/assets/1a43393f-fb56-421b-a6f5-fc50d50577ea">
+<img width="351" alt="image" src="https://github.com/user-attachments/assets/dcbf5026-ada0-4fca-8018-fee973f961ab">
+
+
